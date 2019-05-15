@@ -30,6 +30,8 @@ app.use(bodyParser.json());
 mongoose.Promise = BluebirdPromise;
 
 //DB connection
+mongoose.set("useFindAndModify", false);
+
 mongoose.connect(process.env.MONGODB_URL, {
   useNewUrlParser: true,
   useCreateIndex: true

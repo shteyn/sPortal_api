@@ -44,12 +44,9 @@ router.post("/confirmation", (req, res) => {
     { confirmationToken: "", confirmationEmailSend: true },
     { new: true }
   ).then(user => {
-    console.log("user from confirmation rout", user);
+    //console.log("user from confirmation rout", user);
     user ? res.json({ user: user.toAuthJSON() }) : res.status(400).json({});
-    console.log(
-      "user from confirmation rout user.toAuthJSON()",
-      user.toAuthJSON()
-    );
+    //console.log("user from confirmation rout user.toAuthJSON()", user.toAuthJSON());
   });
 });
 
@@ -66,7 +63,7 @@ router.post("/reset_password_request", (req, res) => {
 });
 
 router.post("/validate_token", (req, res) => {
-  console.log("token validation auth routers", req.body.token);
+  //console.log("token validation auth routers", req.body.token);
   jwt.verify(req.body.token, process.env.JWT_SECRET, err => {
     if (err) {
       res.status(401).json({});
