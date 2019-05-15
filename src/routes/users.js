@@ -6,6 +6,7 @@ import uuid from "uuid";
 import fs from "fs";
 const { promisify } = require("util");
 import {
+  contactUsEmail,
   sendConfirmationEmail,
   sendDeleteUserEmail,
   sendRejectEmail,
@@ -289,6 +290,10 @@ router.post("/users/dashboard", (req, res) => {
         message: "User is not exists"
       })
     );
+});
+
+router.post("/users/contact-us", (req, res) => {
+  contactUsEmail(req.body.contactUsData);
 });
 
 export default router;

@@ -13,6 +13,32 @@ function setup() {
   });
 }
 
+export function contactUsEmail(data) {
+  console.log("transport.sendMail", data);
+  const transport = setup();
+  const mailOpts = {
+    from: data.name + " &lt;" + data.email + "&gt;",
+    to: process.env.MAILRECEIVER,
+    subject: `New message from "Contact Us form" at Alumni Book`,
+    html: `
+    <p>Requester type: ${data.inContact}</p>
+    <p>Name: ${data.name}</p>
+    <p>Email: ${data.email}</p>
+    <p>Location: ${data.location}</p>
+    <p>Message: ${data.question}</p>`
+  };
+  transport.sendMail(mailOpts, function(err, res) {
+    if (error) {
+      console.log("contact-failure", error);
+      res.render("contact-failure");
+    } else {
+      console.log("contact-success", error);
+      res.render("contact-success", res);
+    }
+    transport.close();
+  });
+}
+
 export function sendConfirmationEmail(user) {
   const transport = setup();
   const email = {
