@@ -41,7 +41,7 @@ app.use("/api/auth", auth);
 app.use("/api", users);
 app.use("/uploads", express.static("./public/uploads/"));
 
-const PORT = process.env.PORT || 8080;
+const NODEPORT = process.env.NODEPORT || 8080;
 
 /*app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
@@ -50,6 +50,6 @@ app._router.stack // registered routes
   .filter(r => r.route) // take out all the middleware
   .map(r => r.route.path);
 
-app.listen(PORT, () =>
+app.listen(NODEPORT, () =>
   console.log("Running on localhost:8080", auth.stack.map(r => r.route.path))
 );
