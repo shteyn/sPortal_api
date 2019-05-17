@@ -153,14 +153,15 @@ router.post("/users/registration", (req, res) => {
 router.post("/users/waiting-users/:id", (req, res) => {
   User.findById(req.params.id)
     .then(user => {
-      //sendConfirmationEmail(user);
       approvedUserEmail(user);
       updateConfirmationEmailStatus(user);
       res.json({
         success: true
       });
     })
-    .catch(err => res.status(400).json({ errors: parseErrors(err.errors) }));
+    .catch(err => {
+      res.status(400).json({ errors: parseErrors(err.errors) });
+    });
 });
 //Change status of user when admin approved request
 const updateConfirmationEmailStatus = user => {
@@ -250,6 +251,84 @@ router.get("/users", (req, res) => {
   });
 });
 
+/*const testFunction = users => {
+  users.map(user => {
+    let image = user.userImage;
+    if (image) {
+      fs.readdir("./public/uploads", (err, file) => {
+        file.map(file => {
+          if (image !== file) {
+            User.findByIdAndUpdate(
+              user.id,
+              {
+                userImage: ""
+              },
+              { new: true }
+            ).then(user => console.log("user test fnc", user));
+          }
+        });
+      });
+    }
+  });
+};*/
+router.put("/users-images", () => {
+  User.find().then(users => {
+    users.map(user => {
+      let image = user.userImage;
+      if (image) {
+        fs.readdir("./public/uploads", (err, file) => {
+          file.map(file => {
+            if (image !== file) {
+              User.findByIdAndUpdate(
+                user.id,
+                {
+                  userImage: ""
+                },
+                { new: true }
+              ).then(user => console.log("UPDATED USER", user));
+            }
+          });
+        });
+      }
+      return;
+    });
+  });
+});
+
+//Get All Approved Users
+/*router.get("/users", (req, res) => {
+  User.find(
+    {
+      isAdmin: { $in: ["false", false] }
+    },
+    { passwordHash: 0 }
+  )
+    .then(user => {
+      user.map(user => {
+        if (user.userImage !== "") {
+          fs.readdir("./public/uploads", (err, file) => {
+            file.map(file => {
+              if (user.userImage !== file) {
+                let image = user.userImage;
+                console.log("user.userImage", image);
+                User.findByIdAndUpdate(
+                  user._id,
+                  {
+                    userImage: ""
+                  },
+                  { new: true }
+                ).then(() => {
+                  console.log("image", user);
+                });
+              }
+            });
+          });
+        }
+      });
+    })
+    .catch(error => console.log("error from catch", error));
+});*/
+
 //Get Users By Location
 router.post("/users", (req, res) => {
   User.find(
@@ -276,12 +355,9 @@ router.post("/users/dashboard", (req, res) => {
       passwordHash: 0,
       isAdmin: 0,
       confirmationToken: 0
-      //confirmed: 0,
-      //confirmationEmailSend: 0
     }
   )
     .then(user => {
-      //console.log("user", user);
       res.json(user);
     })
     .catch(error =>
