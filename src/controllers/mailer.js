@@ -14,7 +14,7 @@ function setup() {
 }
 
 export function contactUsEmail(data) {
-  console.log("transport.sendMail", data);
+  //console.log("transport.sendMail", data);
   const transport = setup();
   const mailOpts = {
     from: data.name + " &lt;" + data.email + "&gt;",
@@ -41,100 +41,153 @@ export function contactUsEmail(data) {
 
 export function sendConfirmationEmail(user) {
   const transport = setup();
-  const email = {
+  const mailOpts = {
     from,
     to: user.email,
-    subject: "DCi Students Portal | Registration Confirmation",
-    text: `Dear ${user.firstName},
-
-    Thank you again for your registration with DCI Students Book.
+    subject: "DCi Students Portal | Email Confirmation",
+    html: `
+    <p>Dear ${user.firstName},</p>
+    <p>Thank you for your registration with DCI Alumni Book.</p>
+    <p>Please confirm your email following <a href="${user.generateConfirmationUrl()}">this link</a>, so the administration team will be able to get and review your request.</p>
     
-    Please confirm your email following the link bellow , so the administration team will be able to get get and review your request.
-    ${user.generateConfirmationUrl()}
-    Best regards,
-    DCI-Team`
+    <p>Best regards,</p>
+    <p>DCI-Team</p>`
   };
-  transport.sendMail(email);
+  transport.sendMail(mailOpts, function(err, res) {
+    if (error) {
+      console.log("contact-failure", error);
+      res.render("contact-failure");
+    } else {
+      console.log("contact-success", error);
+      res.render("contact-success", res);
+    }
+    transport.close();
+  });
 }
 
 export function approvedUserEmail(user) {
   const transport = setup();
-  const email = {
+  const mailOpts = {
     from,
     to: user.email,
     subject: "DCi Students Portal | Registration Confirmation",
-    text: `Dear ${user.firstName},
-    
-    Your profile has been verified and you now have access to complete the requested information.
-    
-    http://localhost:3000/
-
-    Best regards,
-    DCI-Team`
+    html: `
+    <p>Dear ${user.firstName},</p>
+    <p>Your profile has been verified and you now have access to complete the requested information.</p>
+    <a href=${process.env.HOST}>Go to DCI Alumni Book</a>
+  
+    <p>Best regards,</p>
+    <p>DCI-Team</p>`
   };
-  transport.sendMail(email);
+  transport.sendMail(mailOpts, function(err, res) {
+    if (error) {
+      console.log("contact-failure", error);
+      res.render("contact-failure");
+    } else {
+      console.log("contact-success", error);
+      res.render("contact-success", res);
+    }
+    transport.close();
+  });
 }
 
 export function sendResetPasswordEmail(user) {
   const transport = setup();
-  const email = {
+  const mailOpts = {
     from,
     to: user.email,
     subject: "DCi Students Portal | Reset Password",
-    text: `Please click follow this link to reset your password.
-    ${user.generateResetPasswordUrl()}`
+    html: `
+    <p>Please click follow <a href="${user.generateResetPasswordUrl()}">this link</a>, to reset your password.</p>
+  
+    <p>Best regards,</p>
+    <p>DCI-Team</p>`
   };
-  transport.sendMail(email);
+  transport.sendMail(mailOpts, function(err, res) {
+    if (error) {
+      console.log("contact-failure", error);
+      res.render("contact-failure");
+    } else {
+      console.log("contact-success", error);
+      res.render("contact-success", res);
+    }
+    transport.close();
+  });
 }
 
 export function sendRejectEmail(user) {
   const transport = setup();
-  const email = {
+  const mailOpts = {
     from,
     to: user.email,
     subject: "DCi Students Portal | Registration Request",
-    text: `Dear ${user.firstName},
-
-    Unfortunately your registration with DCI Alumni Book has been rejected.
-    
-    For more information please contact ​graduates@digitalcareerinstitute.org​.
-    
-    Best regards,
-    DCI-Team`
+    html: `
+    <p>Dear ${user.firstName},</p>
+    <p>Unfortunately your registration with DCI Alumni Book has been rejected.</p>
+    <p>For more information please contact ​graduates@digitalcareerinstitute.org​.</p>
+  
+    <p>Best regards,</p>
+    <p>DCI-Team</p>`
   };
-  transport.sendMail(email);
+  transport.sendMail(mailOpts, function(err, res) {
+    if (error) {
+      console.log("contact-failure", error);
+      res.render("contact-failure");
+    } else {
+      console.log("contact-success", error);
+      res.render("contact-success", res);
+    }
+    transport.close();
+  });
 }
 
 export function sendDeleteUserEmail(user) {
   const transport = setup();
-  const email = {
+  const mailOpts = {
     from,
     to: user.email,
     subject: "DCi Students Portal | Account Status Notification",
-    text: `Dear ${user.firstName},
-
-    Your profile at DCI Alumni Book has been deleted.
-    
-    For more information please contact ​graduates@digitalcareerinstitute.org​.
-    
-    Best regards,
-    DCI-Team`
+    html: `
+    <p>Dear ${user.firstName},</p>
+    <p>Your profile at DCI Alumni Book has been deleted.</p>
+    <p>For more information please contact ​graduates@digitalcareerinstitute.org​.</p>
+  
+    <p>Best regards,</p>
+    <p>DCI-Team</p>`
   };
-  transport.sendMail(email);
+  transport.sendMail(mailOpts, function(err, res) {
+    if (error) {
+      console.log("contact-failure", error);
+      res.render("contact-failure");
+    } else {
+      console.log("contact-success", error);
+      res.render("contact-success", res);
+    }
+    transport.close();
+  });
 }
 
 export function userDeletedHisAccountEmail(user) {
   const transport = setup();
-  const email = {
+  const mailOpts = {
     from,
     to: user.email,
     subject: "DCi Students Portal | Account Status Notification",
-    text: `Dear ${user.firstName},
-
-    Your profile at DCI Alumni Book has been deleted.
-    
-    Best regards,
-    DCI-Team`
+    html: `
+    <p>Dear ${user.firstName},</p>
+    <p>Your profile at DCI Alumni Book has been deleted.</p>
+  
+    <p>Best regards,</p>
+    <p>DCI-Team</p>`
   };
-  transport.sendMail(email);
+  transport.sendMail(mailOpts, function(err, res) {
+    if (error) {
+      console.log("contact-failure", error);
+      res.render("contact-failure");
+    } else {
+      console.log("contact-success", error);
+      res.render("contact-success", res);
+    }
+    transport.close();
+  });
 }
