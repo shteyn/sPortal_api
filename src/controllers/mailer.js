@@ -13,8 +13,29 @@ function setup() {
   });
 }
 
+export function contactStudentEmail(data) {
+  console.log("transport.sendMail", data);
+  const transport = setup();
+  const mailOpts = {
+    from: data.name + " &lt;" + data.email,
+    to: data.studentEmail,
+    subject: `New message from ${data.inContactStudent} - ${
+      data.name
+    } at Alumni Book`,
+    html: `<p>${data.question}</p>`
+  };
+  transport.sendMail(mailOpts, function(err, res) {
+    if (error) {
+      res.render("contact-failure");
+    } else {
+      res.render("contact-success", res);
+    }
+    transport.close();
+  });
+}
+
 export function contactUsEmail(data) {
-  //console.log("transport.sendMail", data);
+  //console.log("transport.", data);
   const transport = setup();
   const mailOpts = {
     from: data.name + " &lt;" + data.email + "&gt;",
@@ -29,10 +50,8 @@ export function contactUsEmail(data) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (error) {
-      console.log("contact-failure", error);
       res.render("contact-failure");
     } else {
-      console.log("contact-success", error);
       res.render("contact-success", res);
     }
     transport.close();
@@ -55,10 +74,8 @@ export function sendConfirmationEmail(user) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (error) {
-      console.log("contact-failure", error);
       res.render("contact-failure");
     } else {
-      console.log("contact-success", error);
       res.render("contact-success", res);
     }
     transport.close();
@@ -81,10 +98,8 @@ export function approvedUserEmail(user) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (error) {
-      console.log("contact-failure", error);
       res.render("contact-failure");
     } else {
-      console.log("contact-success", error);
       res.render("contact-success", res);
     }
     transport.close();
@@ -105,10 +120,8 @@ export function sendResetPasswordEmail(user) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (error) {
-      console.log("contact-failure", error);
       res.render("contact-failure");
     } else {
-      console.log("contact-success", error);
       res.render("contact-success", res);
     }
     transport.close();
@@ -131,10 +144,8 @@ export function sendRejectEmail(user) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (error) {
-      console.log("contact-failure", error);
       res.render("contact-failure");
     } else {
-      console.log("contact-success", error);
       res.render("contact-success", res);
     }
     transport.close();
@@ -157,10 +168,8 @@ export function sendDeleteUserEmail(user) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (error) {
-      console.log("contact-failure", error);
       res.render("contact-failure");
     } else {
-      console.log("contact-success", error);
       res.render("contact-success", res);
     }
     transport.close();
@@ -182,10 +191,8 @@ export function userDeletedHisAccountEmail(user) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (error) {
-      console.log("contact-failure", error);
       res.render("contact-failure");
     } else {
-      console.log("contact-success", error);
       res.render("contact-success", res);
     }
     transport.close();

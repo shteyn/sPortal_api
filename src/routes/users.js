@@ -7,6 +7,7 @@ import fs from "fs";
 const { promisify } = require("util");
 import {
   contactUsEmail,
+  contactStudentEmail,
   sendConfirmationEmail,
   sendDeleteUserEmail,
   sendRejectEmail,
@@ -292,6 +293,10 @@ router.post("/users/dashboard", (req, res) => {
 
 router.post("/users/contact-us", (req, res) => {
   contactUsEmail(req.body.contactUsData);
+});
+
+router.post("/users/contact-student", (req, res) => {
+  contactStudentEmail(req.body.contactStudentData);
 });
 
 export default router;
