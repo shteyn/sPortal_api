@@ -171,7 +171,7 @@ router.post("/users/registration", (req, res) => {
     .then(user => {
       sendConfirmationEmail(user);
       res.json({ user: user.toAuthJSON() });
-      //console.log("res.json registration after toAuthJSON", user.toAuthJSON());
+      console.log("res.json registration after toAuthJSON", user.toAuthJSON());
     })
     .catch(err => res.status(400).json({ errors: parseErrors(err.errors) }));
 });

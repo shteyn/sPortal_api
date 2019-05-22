@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-const from = '"Student_Portal" <info@dci.com>';
+const from = '"Alumni Book Portal" <info@dci.com>';
 
 function setup() {
   return nodemailer.createTransport({
@@ -26,8 +26,10 @@ export function contactStudentEmail(data) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (err) {
+      console.log("contactUsEmail ERROR.", err);
       res.render("contact-failure");
     } else {
+      console.log("contactUsEmail SUCSSES.", res);
       res.render("contact-success", res);
     }
     transport.close();
@@ -35,11 +37,11 @@ export function contactStudentEmail(data) {
 }
 
 export function contactUsEmail(data) {
-  //console.log("transport.", data);
+  console.log("transport.", process.env.ADMIN_MAIL);
   const transport = setup();
   const mailOpts = {
-    from: data.name + " &lt;" + data.email + "&gt;",
-    to: process.env.MAILRECEIVER,
+    from: data.name + " &lt;" + data.email,
+    to: process.env.ADMIN_MAIL,
     subject: `New message from "Contact Us form" at Alumni Book`,
     html: `
     <p>Requester type: ${data.inContact}</p>
@@ -50,8 +52,10 @@ export function contactUsEmail(data) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (err) {
+      console.log("contactUsEmail ERROR.", err);
       res.render("contact-failure");
     } else {
+      console.log("contactUsEmail SUCSSES.", res);
       res.render("contact-success", res);
     }
     transport.close();
@@ -63,7 +67,7 @@ export function sendConfirmationEmail(user) {
   const mailOpts = {
     from,
     to: user.email,
-    subject: "DCi Students Portal | Email Confirmation",
+    subject: "DCI Alumni Book Portal | Email Confirmation",
     html: `
     <p>Dear ${user.firstName},</p>
     <p>Thank you for your registration with DCI Alumni Book.</p>
@@ -87,11 +91,11 @@ export function approvedUserEmail(user) {
   const mailOpts = {
     from,
     to: user.email,
-    subject: "DCi Students Portal | Registration Confirmation",
+    subject: "DCI Alumni Book Portal | Registration Confirmation",
     html: `
     <p>Dear ${user.firstName},</p>
     <p>Your profile has been verified and you now have access to complete the requested information.</p>
-    <a href=${process.env.HOST}>Go to DCI Alumni Book</a>
+    <a href=${process.env.HOST}/dashboard>Go to DCI Alumni Book Portal</a>
   
     <p>Best regards,</p>
     <p>DCI-Team</p>`
@@ -111,7 +115,7 @@ export function sendResetPasswordEmail(user) {
   const mailOpts = {
     from,
     to: user.email,
-    subject: "DCi Students Portal | Reset Password",
+    subject: "DCI Alumni Book Portal | Reset Password",
     html: `
     <p>Please click follow <a href="${user.generateResetPasswordUrl()}">this link</a>, to reset your password.</p>
   
@@ -133,7 +137,7 @@ export function sendRejectEmail(user) {
   const mailOpts = {
     from,
     to: user.email,
-    subject: "DCi Students Portal | Registration Request",
+    subject: "DCI Alumni Book Portal | Registration Request",
     html: `
     <p>Dear ${user.firstName},</p>
     <p>Unfortunately your registration with DCI Alumni Book has been rejected.</p>
@@ -157,7 +161,7 @@ export function sendDeleteUserEmail(user) {
   const mailOpts = {
     from,
     to: user.email,
-    subject: "DCi Students Portal | Account Status Notification",
+    subject: "DCI Alumni Book Portal | Account Status Notification",
     html: `
     <p>Dear ${user.firstName},</p>
     <p>Your profile at DCI Alumni Book has been deleted.</p>
@@ -181,7 +185,7 @@ export function userDeletedHisAccountEmail(user) {
   const mailOpts = {
     from,
     to: user.email,
-    subject: "DCi Students Portal | Account Status Notification",
+    subject: "DCI Alumni Book Portal | Account Status Notification",
     html: `
     <p>Dear ${user.firstName},</p>
     <p>Your profile at DCI Alumni Book has been deleted.</p>
