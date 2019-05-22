@@ -4,6 +4,7 @@ import parseErrors from "../controllers/parseErrors";
 import multer from "multer";
 import uuid from "uuid";
 import fs from "fs";
+import jimp from "jimp";
 const { promisify } = require("util");
 import {
   contactUsEmail,
@@ -19,7 +20,7 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    cb(null, "./public/uploads/");
+    cb(null, process.env.IMAGE_UPLOAD_DIR);
   },
   filename: function(req, file, cb) {
     req["imageFileName"] =
@@ -42,7 +43,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage: storage,
   limit: {
-    fileSite: 1024 * 1024 * 5
+    fileSize: 1024 * 1024
   },
   fileFilter: fileFilter
 });
@@ -50,24 +51,49 @@ const upload = multer({
 const unlinkAsync = promisify(fs.unlink);
 
 //Update Image
-router.post("/users/update-img/:id", upload.single("userImage"), (req, res) => {
-  const newImage = req.imageFileName;
-  User.findById(req.body.id).then(user => {
-    const oldImage = user.userImage;
-    User.findByIdAndUpdate(
-      req.body.id,
-      { userImage: newImage },
-      {
-        new: true,
-        select:
-          "_id location availability createdAt email firstName lastName studentClass linkedInLink xingLink githubLink portfolioLink userImage confirmationEmailSend confirmed isAdmin mainFocus aboutMeSection"
-      }
-    ).then(updatedImg => {
-      unlinkAsync(`./public/uploads/${oldImage}`);
-      res.json(updatedImg);
+router.post(
+  "/users/update-img/:id",
+  upload.single("userImage"),
+  resizeImages,
+  (req, res) => {
+    const newImage = req.imageFileName;
+    User.findById(req.body.id).then(user => {
+      const oldImage = user.userImage;
+      User.findByIdAndUpdate(
+        req.body.id,
+        { userImage: newImage },
+        {
+          new: true,
+          select:
+            "_id location availability createdAt email firstName lastName studentClass linkedInLink xingLink githubLink portfolioLink userImage confirmationEmailSend confirmed isAdmin mainFocus aboutMeSection"
+        }
+      ).then(updatedImg => {
+        unlinkAsync(`${process.env.IMAGE_UPLOAD_DIR}${oldImage}`);
+        res.json(updatedImg);
+      });
     });
-  });
-});
+  }
+);
+
+async function resizeImages(request, response, next) {
+  console.log("resizeImages", request.file);
+  if (!request.file) {
+    next();
+    return;
+  }
+  request.body[request.file.fieldname] = request.file.filename;
+  try {
+    const image = await jimp.read(request.file.path);
+    await image.cover(600, 600);
+    await image.write(
+      `${process.env.IMAGE_UPLOAD_DIR}/${request.body[request.file.fieldname]}`
+    );
+  } catch (error) {
+    console.log(error);
+  }
+
+  next();
+}
 
 //Update user profile
 router.put("/users/update-user/:id", (req, res) => {

@@ -25,7 +25,7 @@ export function contactStudentEmail(data) {
     html: `<p>${data.question}</p>`
   };
   transport.sendMail(mailOpts, function(err, res) {
-    if (error) {
+    if (err) {
       res.render("contact-failure");
     } else {
       res.render("contact-success", res);
@@ -49,7 +49,7 @@ export function contactUsEmail(data) {
     <p>Message: ${data.question}</p>`
   };
   transport.sendMail(mailOpts, function(err, res) {
-    if (error) {
+    if (err) {
       res.render("contact-failure");
     } else {
       res.render("contact-success", res);
@@ -73,7 +73,7 @@ export function sendConfirmationEmail(user) {
     <p>DCI-Team</p>`
   };
   transport.sendMail(mailOpts, function(err, res) {
-    if (error) {
+    if (err) {
       res.render("contact-failure");
     } else {
       res.render("contact-success", res);
@@ -97,7 +97,7 @@ export function approvedUserEmail(user) {
     <p>DCI-Team</p>`
   };
   transport.sendMail(mailOpts, function(err, res) {
-    if (error) {
+    if (err) {
       res.render("contact-failure");
     } else {
       res.render("contact-success", res);
@@ -119,7 +119,7 @@ export function sendResetPasswordEmail(user) {
     <p>DCI-Team</p>`
   };
   transport.sendMail(mailOpts, function(err, res) {
-    if (error) {
+    if (err) {
       res.render("contact-failure");
     } else {
       res.render("contact-success", res);
@@ -143,7 +143,7 @@ export function sendRejectEmail(user) {
     <p>DCI-Team</p>`
   };
   transport.sendMail(mailOpts, function(err, res) {
-    if (error) {
+    if (err) {
       res.render("contact-failure");
     } else {
       res.render("contact-success", res);
@@ -167,7 +167,7 @@ export function sendDeleteUserEmail(user) {
     <p>DCI-Team</p>`
   };
   transport.sendMail(mailOpts, function(err, res) {
-    if (error) {
+    if (err) {
       res.render("contact-failure");
     } else {
       res.render("contact-success", res);
@@ -190,7 +190,7 @@ export function userDeletedHisAccountEmail(user) {
     <p>DCI-Team</p>`
   };
   transport.sendMail(mailOpts, function(err, res) {
-    if (error) {
+    if (err) {
       res.render("contact-failure");
     } else {
       res.render("contact-success", res);
