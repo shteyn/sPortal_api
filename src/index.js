@@ -39,7 +39,7 @@ mongoose.connect(process.env.MONGODB_URL, {
 
 app.use("/api/auth", auth);
 app.use("/api", users);
-app.use("/uploads", express.static("./public/uploads/"));
+app.use("/uploads", express.static(process.env.IMAGE_UPLOAD_DIR));
 
 const NODEPORT = process.env.NODEPORT || 8080;
 
