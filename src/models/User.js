@@ -161,6 +161,8 @@ UserSchema.methods.toAuthJSON = function toAuthJSON() {
   };
 };
 
-UserSchema.plugin(uniqueValidator, { message: "This email is already in use" });
+UserSchema.plugin(uniqueValidator, {
+  message: "This email is already in use. You can reset you password "
+});
 
 export default mongoose.model("User", UserSchema);
