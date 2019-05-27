@@ -5,7 +5,7 @@ import multer from "multer";
 import uuid from "uuid";
 import fs from "fs";
 import jimp from "jimp";
-const { promisify } = require("util");
+
 import {
   contactUsEmail,
   contactStudentEmail,
@@ -16,6 +16,7 @@ import {
   userDeletedHisAccountEmail
 } from "../controllers/mailer";
 
+const { promisify } = require("util");
 const router = express.Router();
 
 const storage = multer.diskStorage({
