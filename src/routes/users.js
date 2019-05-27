@@ -69,7 +69,7 @@ router.post(
             "_id location availability createdAt email firstName lastName studentClass linkedInLink xingLink githubLink portfolioLink userImage confirmationEmailSend confirmed isAdmin mainFocus aboutMeSection"
         }
       ).then(updatedImg => {
-        unlinkAsync(`${process.env.IMAGE_UPLOAD_DIR}${oldImage}`);
+        unlinkAsync(`${process.env.IMAGE_UPLOAD_DIR}/${oldImage}`);
         res.json(updatedImg);
       });
     });
