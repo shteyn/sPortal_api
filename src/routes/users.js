@@ -66,7 +66,7 @@ router.post(
         {
           new: true,
           select:
-            "_id location availability createdAt email firstName lastName studentClass linkedInLink xingLink githubLink portfolioLink userImage confirmationEmailSend confirmed isAdmin mainFocus aboutMeSection"
+            "_id location availability createdAt email firstName lastName studentClass studentCourse linkedInLink xingLink githubLink portfolioLink userImage confirmationEmailSend confirmed isAdmin mainFocus aboutMeSection"
         }
       ).then(updatedImg => {
         unlinkAsync(`${process.env.IMAGE_UPLOAD_DIR}/${oldImage}`);
@@ -77,7 +77,6 @@ router.post(
 );
 
 async function resizeImages(request, response, next) {
-  console.log("resizeImages", request.file);
   if (!request.file) {
     next();
     return;
@@ -90,7 +89,10 @@ async function resizeImages(request, response, next) {
       `${process.env.IMAGE_UPLOAD_DIR}/${request.body[request.file.fieldname]}`
     );
   } catch (error) {
-    console.log(error);
+    res.json({
+      success: false,
+      message: error
+    });
   }
 
   next();
@@ -117,36 +119,6 @@ router.put("/users/update-user/:id", (req, res) => {
     );
 });
 
-//REGISTRATION
-/*
-router.post("/users/registration", (req, res) => {
-  const {
-    email,
-    password,
-    firstName,
-    lastName,
-    location,
-    studentClass
-  } = req.body.user;
-  const user = new User({
-    email,
-    firstName,
-    lastName,
-    location,
-    studentClass
-  });
-  user.setPassword(password);
-  user.setConfirmationToken();
-  user
-    .save()
-    .then(user => {
-      sendConfirmationEmail(user);
-      res.json({ user: user.toAuthJSON() });
-    })
-    .catch(err => res.status(400).json({ errors: parseErrors(err.errors) }));
-});
-*/
-
 router.post("/users/registration", (req, res) => {
   const {
     email,
@@ -172,7 +144,6 @@ router.post("/users/registration", (req, res) => {
     .then(user => {
       sendConfirmationEmail(user);
       res.json({ user: user.toAuthJSON() });
-      console.log("res.json registration after toAuthJSON", user.toAuthJSON());
     })
     .catch(err => res.status(400).json({ errors: parseErrors(err.errors) }));
 });
@@ -193,40 +164,15 @@ router.post("/users/waiting-users/:id", (req, res) => {
 });
 //Change status of user when admin approved request
 const updateConfirmationEmailStatus = user => {
-  User.findByIdAndUpdate(
-    user._id,
-    //{ confirmationEmailSend: true },
-    { confirmed: true },
-    { new: true }
-  ).then(updatedUser => {
-    //console.log("updateConfirmationEmailStatus(user)", updatedUser);
-  });
-};
-
-/*
-//Approve user by admin
-router.post("/users/waiting-users/:id", (req, res) => {
-  User.findById(req.params.id)
-    .then(user => {
-      sendConfirmationEmail(user);
-      updateConfirmationEmailStatus(user);
+  User.findByIdAndUpdate(user._id, { confirmed: true }, { new: true }).then(
+    updatedUser => {
       res.json({
         success: true
       });
-    })
-    .catch(err => res.status(400).json({ errors: parseErrors(err.errors) }));
-});
-//Change status of user when admin approved request
-const updateConfirmationEmailStatus = user => {
-  User.findByIdAndUpdate(
-    user._id,
-    { confirmationEmailSend: true },
-    { new: true }
-  ).then(updatedUser => {
-    console.log("updateConfirmationEmailStatus(user)", updatedUser);
-  });
+    }
+  );
 };
-*/
+
 //Reject waiting user by admin
 router.delete("/users/delete-users/:id", (req, res) => {
   User.findById(req.params.id)
