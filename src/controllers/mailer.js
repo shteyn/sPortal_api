@@ -14,7 +14,6 @@ function setup() {
 }
 
 export function contactStudentEmail(data) {
-  console.log("transport.sendMail", data);
   const transport = setup();
   const mailOpts = {
     from: data.name + " &lt;" + data.email,
@@ -26,10 +25,8 @@ export function contactStudentEmail(data) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (err) {
-      console.log("contactUsEmail ERROR.", err);
       res.render("contact-failure");
     } else {
-      console.log("contactUsEmail SUCSSES.", res);
       res.render("contact-success", res);
     }
     transport.close();
@@ -37,7 +34,6 @@ export function contactStudentEmail(data) {
 }
 
 export function contactUsEmail(data) {
-  console.log("transport.", process.env.ADMIN_MAIL);
   const transport = setup();
   const mailOpts = {
     from: data.name + " &lt;" + data.email,
@@ -52,10 +48,8 @@ export function contactUsEmail(data) {
   };
   transport.sendMail(mailOpts, function(err, res) {
     if (err) {
-      console.log("contactUsEmail ERROR.", err);
       res.render("contact-failure");
     } else {
-      console.log("contactUsEmail SUCSSES.", res);
       res.render("contact-success", res);
     }
     transport.close();
