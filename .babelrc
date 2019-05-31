@@ -1,5 +1,10 @@
 {
   "presets": ["env"],
+  "env": {
+    "production": {
+      "plugins": ["transform-remove-console"]
+    }
+  },
   "plugins": [
     [
       "transform-runtime",
